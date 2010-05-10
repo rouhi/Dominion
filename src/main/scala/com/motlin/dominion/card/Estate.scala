@@ -1,3 +1,3 @@
 package com.motlin.dominion.card
 
-case object Estate
+case object Estate extends Card

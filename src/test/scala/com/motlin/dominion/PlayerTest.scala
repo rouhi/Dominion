@@ -34,4 +34,15 @@ class PlayerTest
 		val coppers = player.hand.count(_ == Copper)
 		Assert.assertTrue(2 <= coppers && coppers <= 5)
 	}
+
+	@Test
+	def discard_draws_5_new_cards
+	{
+		val estatesOnFirstTurn = player.hand.count(_ == Estate)
+		player.cleanUp
+		val estatesOnSecondTurn = player.hand.count(_ == Estate)
+		Assert.assertEquals(3 - estatesOnFirstTurn, estatesOnSecondTurn)
+		Assert.assertEquals(5, player.discard.size)
+		Assert.assertEquals(0, player.deck.cards.size)
+	}
 }
