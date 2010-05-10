@@ -29,8 +29,7 @@ class DeckTest
 		for (i <- 1 to 10)
 		{
 			val card = deck.draw(1).first
-			val cardType = card.getClass
-			Assert.assertTrue(cardType == Estate.getClass || cardType == Copper.getClass)
+			Assert.assertTrue(card == Estate || card == Copper)
 		}
 
 		Assert.assertEquals(List(), deck.draw(1))
