@@ -1,10 +1,19 @@
 package com.motlin.dominion
 
 import card.{Copper, Estate}
+import scala.util.Random
 
 class Deck
 {
-	val estates = List.fill(3)(new Estate)
-	val coppers = List.fill(7)(new Copper)
-	val cards = estates ++ coppers
+	private[dominion] val estates = List.fill(3)(Estate)
+	private[dominion] val coppers = List.fill(7)(Copper)
+	private[dominion] var cards = estates ++ coppers
+	Random.shuffle(cards)
+
+	def draw(num: Int) =
+	{
+		val (drawn, left) = cards.splitAt(num)
+		cards = left
+		drawn
+	}
 }

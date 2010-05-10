@@ -1,3 +1,3 @@
 package com.motlin.dominion.card
 
-class Copper
+case object Copper

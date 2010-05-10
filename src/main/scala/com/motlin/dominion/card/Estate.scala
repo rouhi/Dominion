@@ -1,3 +1,3 @@
 package com.motlin.dominion.card
 
-class Estate
+case object Estate

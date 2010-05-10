@@ -8,16 +8,31 @@ class DeckTest
 	val deck = new Deck
 
 	@Test
-	def deck_starts_with_10_cards
+	def starts_with_10_cards
 	{
 		Assert.assertEquals(10, deck.cards.size)
 	}
 
 	@Test
-	def deck_starts_with_7_copper_and_3_estates
+	def starts_with_7_copper_and_3_estates
 	{
-		val multimap = deck.cards.groupBy(_.getClass)
-		Assert.assertEquals(7, multimap(classOf[Copper]).size)
-		Assert.assertEquals(3, multimap(classOf[Estate]).size)
+		val estates = deck.cards.count(_ == Estate)
+		Assert.assertEquals(3, estates)
+
+		val coppers = deck.cards.count(_ == Copper)
+		Assert.assertEquals(7, coppers)
+	}
+
+	@Test
+	def cannot_draw_when_no_cards
+	{
+		for (i <- 1 to 10)
+		{
+			val card = deck.draw(1).first
+			val cardType = card.getClass
+			Assert.assertTrue(cardType == Estate.getClass || cardType == Copper.getClass)
+		}
+
+		Assert.assertEquals(List(), deck.draw(1))
 	}
 }
