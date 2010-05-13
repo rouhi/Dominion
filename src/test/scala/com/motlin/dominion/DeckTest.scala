@@ -5,33 +5,53 @@ import org.junit.{Assert, Test}
 
 class DeckTest
 {
-	val deck = new DrawPile
+	val deck = new Deck
+	val initialCards = (deck.drawPile ++ deck.hand)
 
 	@Test
-	def starts_with_10_cards
+	def starts_with_hand_of_5_cards
 	{
-		Assert.assertEquals(10, deck.cards.size)
+		Assert.assertEquals(5, deck.hand.size)
+	}
+
+	@Test
+	def starts_with_deck_of_5_cards
+	{
+		Assert.assertEquals(5, deck.drawPile.size)
+	}
+
+	@Test
+	def starts_with_empty_discard_pile
+	{
+		Assert.assertEquals(0, deck.discard.size)
 	}
 
 	@Test
 	def starts_with_7_copper_and_3_estates
 	{
-		val estates = deck.cards.count(_ == Estate)
-		Assert.assertEquals(3, estates)
 
-		val coppers = deck.cards.count(_ == Copper)
-		Assert.assertEquals(7, coppers)
+		Assert.assertEquals(3, initialCards.count(_ == Estate))
+		Assert.assertEquals(7, initialCards.count(_ == Copper))
 	}
 
 	@Test
-	def cannot_draw_when_no_cards
+	def starts_with_0_to_2_estates
 	{
-		for (i <- 1 to 10)
-		{
-			val card = deck.draw(1).first
-			Assert.assertTrue(card == Estate || card == Copper)
-		}
+		val estates = deck.hand.count(_ == Estate)
+		Assert.assertTrue(0 <= estates && estates <= 3)
 
-		Assert.assertEquals(List(), deck.draw(1))
+		val coppers = deck.hand.count(_ == Copper)
+		Assert.assertTrue(2 <= coppers && coppers <= 5)
+	}
+
+	@Test
+	def discard_draws_5_new_cards
+	{
+		val estatesOnFirstTurn = deck.hand.count(_ == Estate)
+		deck.discardHand
+		val estatesOnSecondTurn = deck.hand.count(_ == Estate)
+		Assert.assertEquals(3 - estatesOnFirstTurn, estatesOnSecondTurn)
+		Assert.assertEquals(5, deck.discard.size)
+		Assert.assertEquals(0, deck.drawPile.size)
 	}
 }

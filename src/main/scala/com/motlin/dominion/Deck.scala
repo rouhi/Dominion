@@ -1,16 +1,34 @@
 package com.motlin.dominion
 
-import card.Card
+import card.{Estate, Copper, Card}
+import util.Random
+
+object Deck
+{
+	val INITIAL_DECK = List.fill(3)(Estate) ++ List.fill(7)(Copper)
+}
 
 class Deck
 {
-	private[dominion] val drawPile = new DrawPile
-	private[dominion] var hand: List[Card] = drawPile.draw(5)
+	var (hand, drawPile) = Random.shuffle(Deck.INITIAL_DECK).splitAt(5)
 	private[dominion] var discard: List[Card] = List()
 
-	def discardHand
+	def drawOneCard()
+	{
+		hand = hand ++ drawPile.headOption
+		drawPile = drawPile.tail
+	}
+
+	def drawFiveCards()
+	{
+		for (i <- 1 to 5)
+			this.drawOneCard()
+	}
+
+	def discardHand()
 	{
 		discard ++= hand
-		hand = drawPile.draw(5)
+		hand = List()
+		this.drawFiveCards()
 	}
 }
