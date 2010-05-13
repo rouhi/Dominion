@@ -5,7 +5,7 @@ import org.junit.{Assert, Test}
 
 class DeckTest
 {
-	val deck = new Deck
+	val deck = new DrawPile
 
 	@Test
 	def starts_with_10_cards

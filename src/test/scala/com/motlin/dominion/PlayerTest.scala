@@ -5,7 +5,7 @@ import org.junit.{Assert, Test}
 
 class PlayerTest
 {
-	val player = new Player
+	val player = new Deck
 
 	@Test
 	def starts_with_hand_of_5_cards
@@ -16,7 +16,7 @@ class PlayerTest
 	@Test
 	def starts_with_deck_of_5_cards
 	{
-		Assert.assertEquals(5, player.deck.cards.size)
+		Assert.assertEquals(5, player.drawPile.cards.size)
 	}
 
 	@Test
@@ -39,10 +39,10 @@ class PlayerTest
 	def discard_draws_5_new_cards
 	{
 		val estatesOnFirstTurn = player.hand.count(_ == Estate)
-		player.cleanUp
+		player.discardHand
 		val estatesOnSecondTurn = player.hand.count(_ == Estate)
 		Assert.assertEquals(3 - estatesOnFirstTurn, estatesOnSecondTurn)
 		Assert.assertEquals(5, player.discard.size)
-		Assert.assertEquals(0, player.deck.cards.size)
+		Assert.assertEquals(0, player.drawPile.cards.size)
 	}
 }
