@@ -5,7 +5,7 @@ import util.Random
 
 object Deck
 {
-	val INITIAL_DECK = List.fill(3)(Estate) ++ List.fill(7)(Copper)
+	val INITIAL_DECK: List[Card] = List.fill(3)(Estate) ++ List.fill(7)(Copper)
 }
 
 class Deck
@@ -15,6 +15,11 @@ class Deck
 
 	def drawOneCard()
 	{
+		if (drawPile.isEmpty)
+		{
+			drawPile = Random.shuffle(discard)
+			discard = List()
+		}
 		hand = hand ++ drawPile.headOption
 		drawPile = drawPile.tail
 	}

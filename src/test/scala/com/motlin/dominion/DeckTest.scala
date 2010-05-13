@@ -54,4 +54,12 @@ class DeckTest
 		Assert.assertEquals(5, deck.discard.size)
 		Assert.assertEquals(0, deck.drawPile.size)
 	}
+
+	@Test
+	def draw_from_empty_deck_shuffles_back_in_discard_pile
+	{
+		deck.discardHand
+		deck.discardHand
+		Assert.assertEquals(5, deck.hand.size)
+	}
 }
