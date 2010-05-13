@@ -2,6 +2,7 @@ package com.motlin.dominion
 
 import card.{Estate, Copper, Card}
 import util.Random
+import scala.collection.mutable.ArrayBuffer
 
 object Deck
 {
@@ -10,8 +11,10 @@ object Deck
 
 class Deck
 {
-	var (hand, drawPile) = Random.shuffle(Deck.INITIAL_DECK).splitAt(5)
-	private[dominion] var discard: List[Card] = List()
+	private val (handList, drawPileList) = Random.shuffle(Deck.INITIAL_DECK).splitAt(5)
+	val hand = ArrayBuffer(handList: _*)
+	var drawPile = drawPileList
+	var discard = List[Card]()
 
 	def drawOneCard()
 	{
@@ -20,8 +23,12 @@ class Deck
 			drawPile = Random.shuffle(discard)
 			discard = List()
 		}
-		hand = hand ++ drawPile.headOption
-		drawPile = drawPile.tail
+
+		if (drawPile.nonEmpty)
+		{
+			hand += drawPile.head
+			drawPile = drawPile.tail
+		}
 	}
 
 	def drawFiveCards()
@@ -33,7 +40,7 @@ class Deck
 	def discardHand()
 	{
 		discard ++= hand
-		hand = List()
+		hand.clear()
 		this.drawFiveCards()
 	}
 }

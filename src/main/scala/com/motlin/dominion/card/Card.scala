@@ -1,3 +1,6 @@
 package com.motlin.dominion.card
 
-trait Card 
+trait Card
+{
+	def cost: Int
+}
