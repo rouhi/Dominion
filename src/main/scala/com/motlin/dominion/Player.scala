@@ -1,7 +1,6 @@
 package com.motlin.dominion
 
 import card._
-import collection.immutable.List
 
 class Player
 {
