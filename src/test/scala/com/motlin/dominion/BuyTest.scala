@@ -9,7 +9,6 @@ class BuyTest
 	val player = new Player
 	player.deck.hand.clear()
 
-
 	@Test
 	def player_with_0_can_afford_copper
 	{
