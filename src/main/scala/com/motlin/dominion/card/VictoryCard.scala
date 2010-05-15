@@ -1,6 +1,6 @@
 package com.motlin.dominion.card
 
-trait VictoryPoints extends Card
+trait VictoryCard extends Card
 {
 	def victoryPoints: Int
 }
