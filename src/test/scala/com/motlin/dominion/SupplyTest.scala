@@ -1,11 +1,10 @@
 package com.motlin.dominion
 
-import card.vp.{Estate, Province, Duchy}
+import card.vp._
 import org.junit.{Test, Assert}
 
 class SupplyTest
 {
-
 	@Test
 	def starts_with_8_vp_cards_for_two_players
 	{
@@ -30,6 +29,4 @@ class SupplyTest
 		Assert.assertEquals(count, supply.count(Estate))
 		Assert.assertEquals(count, supply.count(Province))
 	}
-
-
 }
