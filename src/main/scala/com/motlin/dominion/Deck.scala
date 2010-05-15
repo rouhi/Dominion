@@ -1,6 +1,7 @@
 package com.motlin.dominion
 
-import card.{Estate, Copper, Card}
+import card.vp.Estate
+import card.{Copper, Card}
 import util.Random
 import scala.collection.mutable.ArrayBuffer
 

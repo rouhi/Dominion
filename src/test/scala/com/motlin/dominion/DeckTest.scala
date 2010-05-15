@@ -1,6 +1,7 @@
 package com.motlin.dominion
 
-import card.{Copper, Estate}
+import card.Copper
+import card.vp.Estate
 import org.junit.{Assert, Test}
 
 class DeckTest

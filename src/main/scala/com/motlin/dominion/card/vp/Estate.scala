@@ -1,4 +1,6 @@
-package com.motlin.dominion.card
+package com.motlin.dominion.card.vp
+
+import com.motlin.dominion.card.VictoryPoints
 
 case object Estate extends VictoryPoints
 {
