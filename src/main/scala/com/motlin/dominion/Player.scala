@@ -2,7 +2,7 @@ package com.motlin.dominion
 
 import card._
 
-class Player
+class Player(val supply: Supply)
 {
 	val deck = new Deck
 	var coins = 0
@@ -25,6 +25,6 @@ class Player
 			throw new IllegalStateException("Cannot afford card: " + card.toString)
 
 		coins -= card.cost
-		deck.discard ::= card 
+		deck.discard ::= supply.take(card) 
 	}
 }

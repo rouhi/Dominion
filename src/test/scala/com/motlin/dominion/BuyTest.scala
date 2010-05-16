@@ -6,7 +6,7 @@ import org.junit.{Test, Assert}
 
 class BuyTest
 {
-	val player = new Player
+	val player = new Player(new Supply(1))
 	player.deck.hand.clear()
 
 
@@ -31,10 +31,23 @@ class BuyTest
 	@Test
 	def player_with_2_can_afford_estate
 	{
+		buyEstate()
+		Assert.assertEquals(List(Estate), player.deck.discard)
+	}
+
+	@Test
+	def buy_takes_card_from_supply
+	{
+		val initialCount = player.supply.count(Estate)
+		buyEstate()
+		Assert.assertEquals(initialCount - 1, player.supply.count(Estate))
+	}
+
+	private def buyEstate()
+	{
 		player.deck.hand ++= List(Estate, Copper, Estate, Copper, Estate)
 		player.play(Copper)
 		player.play(Copper)
 		player.buy(Estate)
-		Assert.assertEquals(List(Estate), player.deck.discard)
 	}
 }

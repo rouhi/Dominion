@@ -7,7 +7,7 @@ import collection.mutable.ListBuffer
 
 class PlayerTest
 {
-	val player = new Player
+	val player = new Player(new Supply(1))
 	player.deck.hand.clear()
 
 	@Test
