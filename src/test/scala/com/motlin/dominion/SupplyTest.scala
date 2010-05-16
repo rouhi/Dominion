@@ -1,7 +1,8 @@
 package com.motlin.dominion
 
 import card.vp._
-import org.junit.{Test, Assert}
+import org.junit.Test
+import org.scalatest.junit.AssertionsForJUnit._
 
 class SupplyTest
 {
@@ -25,8 +26,8 @@ class SupplyTest
 
 	private def assertVictoryCount(supply: Supply, count: Int)
 	{
-		Assert.assertEquals(count, supply.count(Duchy))
-		Assert.assertEquals(count, supply.count(Estate))
-		Assert.assertEquals(count, supply.count(Province))
+		assert(supply.count(Duchy) === count)
+		assert(supply.count(Estate) === count)
+		assert(supply.count(Province) === count)
 	}
 }

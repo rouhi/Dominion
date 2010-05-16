@@ -2,7 +2,8 @@ package com.motlin.dominion
 
 import card.Copper
 import card.vp.Estate
-import org.junit.{Assert, Test}
+import org.junit.Test
+import org.scalatest.junit.AssertionsForJUnit._
 
 class DeckTest
 {
@@ -12,37 +13,36 @@ class DeckTest
 	@Test
 	def starts_with_hand_of_5_cards
 	{
-		Assert.assertEquals(5, deck.hand.size)
+		assert(deck.hand.size === 5)
 	}
 
 	@Test
 	def starts_with_deck_of_5_cards
 	{
-		Assert.assertEquals(5, deck.drawPile.size)
+		assert(deck.drawPile.size === 5)
 	}
 
 	@Test
 	def starts_with_empty_discard_pile
 	{
-		Assert.assertEquals(0, deck.discard.size)
+		assert(deck.discard.size === 0)
 	}
 
 	@Test
 	def starts_with_7_copper_and_3_estates
 	{
-
-		Assert.assertEquals(3, initialCards.count(_ == Estate))
-		Assert.assertEquals(7, initialCards.count(_ == Copper))
+		assert(initialCards.count(_ == Estate) === 3)
+		assert(initialCards.count(_ == Copper) === 7)
 	}
 
 	@Test
 	def starts_with_0_to_2_estates
 	{
 		val estates = deck.hand.count(_ == Estate)
-		Assert.assertTrue(0 <= estates && estates <= 3)
+		assert(0 <= estates && estates <= 3)
 
 		val coppers = deck.hand.count(_ == Copper)
-		Assert.assertTrue(2 <= coppers && coppers <= 5)
+		assert(2 <= coppers && coppers <= 5)
 	}
 
 	@Test
@@ -51,9 +51,9 @@ class DeckTest
 		val estatesOnFirstTurn = deck.hand.count(_ == Estate)
 		deck.discardHand
 		val estatesOnSecondTurn = deck.hand.count(_ == Estate)
-		Assert.assertEquals(3 - estatesOnFirstTurn, estatesOnSecondTurn)
-		Assert.assertEquals(5, deck.discard.size)
-		Assert.assertEquals(0, deck.drawPile.size)
+		assert(estatesOnFirstTurn + estatesOnSecondTurn === 3)
+		assert(deck.discard.size === 5)
+		assert(deck.drawPile.size === 0)
 	}
 
 	@Test
@@ -61,6 +61,6 @@ class DeckTest
 	{
 		deck.discardHand
 		deck.discardHand
-		Assert.assertEquals(5, deck.hand.size)
+		assert(deck.hand.size === 5)
 	}
 }

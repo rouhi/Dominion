@@ -1,9 +1,11 @@
 package com.motlin.dominion
 
+import collection.mutable.ListBuffer
+
 import card.Copper
 import card.vp.Estate
-import org.junit.{Test, Assert}
-import collection.mutable.ListBuffer
+import org.junit.Test
+import org.scalatest.junit.AssertionsForJUnit._
 
 class PlayerTest
 {
@@ -15,24 +17,29 @@ class PlayerTest
 	{
 		player.deck.hand ++= List(Estate, Copper, Estate, Copper)
 		player.play(Copper)
-		Assert.assertEquals(1, player.coins)
-		Assert.assertEquals(ListBuffer(Estate, Estate, Copper), player.deck.hand)
+		assert(player.coins === 1)
+		assert(player.deck.hand === ListBuffer(Estate, Estate, Copper))
 	}
 
-	// TODO This syntax for expecting exceptions doesn't actually work
-	@Test(expected = classOf[IllegalArgumentException])
+	@Test
 	def can_not_play_card_not_held
 	{
 		player.deck.hand ++= List(Estate, Estate, Estate)
 		player.deck.drawPile = List(Copper, Estate)
-		player.play(Copper)
+
+		intercept[IllegalArgumentException]
+		{
+			player.play(Copper)
+		}
 	}
 
-	// TODO This syntax for expecting exceptions doesn't actually work
-	@Test(expected = classOf[IllegalArgumentException])
+	@Test
 	def can_not_play_victory_point_cards
 	{
 		player.deck.hand ++= List(Estate, Copper, Estate)
-		player.play(Estate)
+		intercept[IllegalArgumentException]
+		{
+			player.play(Estate)
+		}
 	}
 }

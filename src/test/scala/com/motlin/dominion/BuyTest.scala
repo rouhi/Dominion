@@ -2,7 +2,8 @@ package com.motlin.dominion
 
 import card.vp.Estate
 import card.Copper
-import org.junit.{Test, Assert}
+import org.junit.Test
+import org.scalatest.junit.AssertionsForJUnit._
 
 class BuyTest
 {
@@ -15,16 +16,18 @@ class BuyTest
 		player.deck.drawPile = List()
 		player.buy(Copper)
 
-		Assert.assertEquals(List(), player.deck.drawPile)
-		Assert.assertEquals(List(Copper), player.deck.discard)
-		Assert.assertTrue(player.deck.hand.isEmpty)
+		assert(player.deck.drawPile === List())
+		assert(player.deck.discard === List(Copper))
+		assert(player.deck.hand.isEmpty)
 	}
 
-	// TODO expect specific exception
-	@Test(expected = classOf[Exception])
+	@Test
 	def player_with_0_can_not_afford_estate
 	{
-		player.buy(Estate)
+		intercept[IllegalStateException]
+		{
+			player.buy(Estate)
+		}
 	}
 
 	@Test
@@ -34,6 +37,6 @@ class BuyTest
 		player.play(Copper)
 		player.play(Copper)
 		player.buy(Estate)
-		Assert.assertEquals(List(Estate), player.deck.discard)
+		assert(player.deck.discard === List(Estate))
 	}
 }
