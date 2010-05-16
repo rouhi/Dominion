@@ -49,7 +49,8 @@ class DeckTest
 	def discard_draws_5_new_cards
 	{
 		val estatesOnFirstTurn = deck.hand.count(_ == Estate)
-		deck.discardHand
+		deck.discardHand()
+		deck.drawFiveCards()
 		val estatesOnSecondTurn = deck.hand.count(_ == Estate)
 		assert(estatesOnFirstTurn + estatesOnSecondTurn === 3)
 		assert(deck.discard.size === 5)
@@ -59,8 +60,10 @@ class DeckTest
 	@Test
 	def draw_from_empty_deck_shuffles_back_in_discard_pile
 	{
-		deck.discardHand
-		deck.discardHand
+		deck.discardHand()
+		deck.drawFiveCards()
+		deck.discardHand()
+		deck.drawFiveCards()
 		assert(deck.hand.size === 5)
 	}
 }

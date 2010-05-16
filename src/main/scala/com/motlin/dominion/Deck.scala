@@ -43,6 +43,5 @@ class Deck
 	{
 		discard ++= hand
 		hand.clear()
-		this.drawFiveCards()
 	}
 }

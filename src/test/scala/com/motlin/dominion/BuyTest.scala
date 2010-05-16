@@ -4,37 +4,43 @@ import card.vp.Estate
 import card.treasure.Copper
 import org.junit.Test
 import org.scalatest.junit.AssertionsForJUnit._
+import java.lang.IllegalArgumentException
 
 class BuyTest
 {
 	val player = new Player(new Supply(1))
 	player.deck.hand.clear()
+	player.deck.drawPile = List()
+	player.startTurn()
 
 	@Test
 	def player_with_0_can_afford_copper
 	{
-		player.deck.drawPile = List()
 		player.buy(Copper)
 
 		assert(player.deck.drawPile === List())
-		assert(player.deck.discard === List(Copper))
-		assert(player.deck.hand.isEmpty)
+		assert(player.deck.discard === List())
+		assert(player.deck.hand === List(Copper))
+		assert(player.turn === None)
 	}
 
 	@Test
 	def player_with_0_can_not_afford_estate
 	{
-		intercept[IllegalStateException]
+		val exception = intercept[IllegalArgumentException]
 		{
 			player.buy(Estate)
 		}
+		assert(exception.getMessage.contains("Cannot afford card: Estate"))
 	}
 
 	@Test
 	def player_with_2_can_afford_estate
 	{
 		buyEstate()
-		assert(player.deck.discard === List(Estate))
+		assert(player.deck.drawPile === List())
+		assert(player.deck.discard === List())
+		assert(player.deck.hand.sortBy(_.toString) === List(Copper, Copper, Estate, Estate))
 	}
 
 	@Test
@@ -47,7 +53,7 @@ class BuyTest
 
 	private def buyEstate()
 	{
-		player.deck.hand ++= List(Estate, Copper, Estate, Copper, Estate)
+		player.deck.hand ++= List(Copper, Estate, Copper)
 		player.play(Copper)
 		player.play(Copper)
 		player.buy(Estate)

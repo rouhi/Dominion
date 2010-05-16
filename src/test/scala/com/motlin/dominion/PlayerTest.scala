@@ -11,13 +11,14 @@ class PlayerTest
 {
 	val player = new Player(new Supply(1))
 	player.deck.hand.clear()
+	player.startTurn()
 
 	@Test
 	def play_copper_for_one_coin
 	{
 		player.deck.hand ++= List(Estate, Copper, Estate, Copper)
 		player.play(Copper)
-		assert(player.coins === 1)
+		assert(player.turn.get.coins === 1)
 		assert(player.deck.hand === ListBuffer(Estate, Estate, Copper))
 	}
 
