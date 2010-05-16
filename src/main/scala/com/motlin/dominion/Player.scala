@@ -14,7 +14,7 @@ class Player(val supply: Supply)
 		
 		card match {
 			case treasure: Treasure => coins += treasure.value
-			case vp: VictoryCard => throw new IllegalArgumentException("May not play a victory point card: " + card.toString)
+			case vp: Victory => throw new IllegalArgumentException("May not play a victory point card: " + card.toString)
 			case _ => throw new IllegalArgumentException("Unknown card: " + card.toString)
 		}
 	}
