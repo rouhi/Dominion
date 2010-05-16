@@ -2,14 +2,14 @@ package com.motlin.dominion
 
 import collection.mutable.ListBuffer
 
-import card.Copper
+import card.treasure.Copper
 import card.vp.Estate
 import org.junit.Test
 import org.scalatest.junit.AssertionsForJUnit._
 
 class PlayerTest
 {
-	val player = new Player
+	val player = new Player(new Supply(1))
 	player.deck.hand.clear()
 
 	@Test

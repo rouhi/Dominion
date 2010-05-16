@@ -1,13 +1,13 @@
 package com.motlin.dominion
 
 import card.vp.Estate
-import card.Copper
+import card.treasure.Copper
 import org.junit.Test
 import org.scalatest.junit.AssertionsForJUnit._
 
 class BuyTest
 {
-	val player = new Player
+	val player = new Player(new Supply(1))
 	player.deck.hand.clear()
 
 	@Test
@@ -33,10 +33,23 @@ class BuyTest
 	@Test
 	def player_with_2_can_afford_estate
 	{
+		buyEstate()
+		assert(player.deck.discard === List(Estate))
+	}
+
+	@Test
+	def buy_takes_card_from_supply
+	{
+		val initialCount = player.supply.count(Estate)
+		buyEstate()
+		assert(player.supply.count(Estate) === initialCount - 1)
+	}
+
+	private def buyEstate()
+	{
 		player.deck.hand ++= List(Estate, Copper, Estate, Copper, Estate)
 		player.play(Copper)
 		player.play(Copper)
 		player.buy(Estate)
-		assert(player.deck.discard === List(Estate))
 	}
 }
