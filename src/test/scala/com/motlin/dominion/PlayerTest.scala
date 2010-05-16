@@ -1,6 +1,6 @@
 package com.motlin.dominion
 
-import card.Copper
+import card.treasure.Copper
 import card.vp.Estate
 import org.junit.{Test, Assert}
 import collection.mutable.ListBuffer

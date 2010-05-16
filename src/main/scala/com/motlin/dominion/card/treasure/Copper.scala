@@ -1,4 +1,6 @@
-package com.motlin.dominion.card
+package com.motlin.dominion.card.treasure
+
+import com.motlin.dominion.card.Treasure
 
 case object Copper extends Treasure
 {

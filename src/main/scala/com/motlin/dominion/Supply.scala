@@ -2,7 +2,7 @@ package com.motlin.dominion
 
 import card.treasure._
 import card.vp._
-import card.{Copper, Card}
+import card.Card
 import collection.mutable.Map
 
 class Supply(numPlayers: Int)

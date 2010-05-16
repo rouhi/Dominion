@@ -1,7 +1,7 @@
 package com.motlin.dominion
 
 import card.vp.Estate
-import card.Copper
+import card.treasure.Copper
 import org.junit.{Test, Assert}
 
 class BuyTest
