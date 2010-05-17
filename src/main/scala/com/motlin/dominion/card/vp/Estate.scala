@@ -1,9 +1,9 @@
 package com.motlin.dominion.card.vp
 
-import com.motlin.dominion.card.VictoryCard
+import com.motlin.dominion.card.Victory
 
-case object Estate extends VictoryCard
+case object Estate extends Victory
 {
 	val cost = 2
-	val victoryPoints = 1
+	val points = 1
 }

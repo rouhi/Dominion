@@ -1,30 +1,85 @@
 package com.motlin.dominion
 
 import card._
+import collection.mutable.{Undoable, Stack}
 
 class Player(val supply: Supply)
 {
+	class Turn
+	{
+		var actions = 1
+		var buys = 1
+		var coins = 0
+		var table = List[Card]()
+		var undoStack = Stack[AnyRef]()
+
+		def play(card: Card)
+		{
+			card match
+			{
+				case treasure: Treasure =>
+				{
+					table ::= treasure
+					coins += treasure.value
+					undoStack.push(treasure)
+				}
+				case action: Action =>
+				{
+					val undoable = action(Player.this)
+					undoStack.push(undoable)
+				}
+			}
+		}
+
+		def undo()
+		{
+			val card = undoStack.top
+			require(card.isInstanceOf[Undoable], "Card must be undoable: " + card.toString)
+			undoStack.pop().asInstanceOf[Undoable].undo()
+		}
+	}
+
 	val deck = new Deck
-	var coins = 0
+	var turn: Option[Turn] = None
+
+	def startTurn()
+	{
+		turn = Some(new Turn)	
+	}
 
 	def play(card: Card)
 	{
-		require(deck.hand.contains(card))
+		require(deck.hand.contains(card), "Hand must contain card: " + card.toString)
+		require(card.isInstanceOf[Treasure] || card.isInstanceOf[Action], "May only play treasures and actions: " + card.toString)
+
 		deck.hand -= card
-		
-		card match {
-			case treasure: Treasure => coins += treasure.value
-			case vp: VictoryCard => throw new IllegalArgumentException("May not play a victory point card: " + card.toString)
-			case _ => throw new IllegalArgumentException("Unknown card: " + card.toString)
-		}
+		turn.get.play(card)
 	}
 
 	def buy(card: Card)
 	{
-		if (card.cost > coins)
-			throw new IllegalStateException("Cannot afford card: " + card.toString)
+		require(turn.get.coins >= card.cost, "Cannot afford card: " + card.toString)
 
-		coins -= card.cost
-		deck.discard ::= supply.take(card) 
+		turn.get.coins -= card.cost
+		deck.discard ::= supply.take(card)
+
+		turn.get.buys -= 1
+		if (turn.get.buys == 0)
+		{
+			endTurn()
+		}
+	}
+
+	def endTurn()
+	{
+		deck.discardHand()
+		deck.discard ++= turn.get.table
+		turn = None
+		deck.drawFiveCards()
+	}
+
+	def undo()
+	{
+		this.turn.get.undo()
 	}
 }
