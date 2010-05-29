@@ -3,7 +3,7 @@ package com.motlin.dominion
 import card._
 import collection.mutable.{Undoable, Stack}
 
-class Player(val supply: Supply)
+abstract class Player(val supply: Supply)
 {
 	class Turn
 	{
@@ -39,14 +39,17 @@ class Player(val supply: Supply)
 		}
 	}
 
-	val deck = new Deck
+	val deck: DeckTrait = new Deck
 	var turn: Option[Turn] = None
 
 	def startTurn()
 	{
-		turn = Some(new Turn)	
+		turn = Some(new Turn)
+		takeTurn()
 	}
 
+	def takeTurn() : Unit
+	
 	def play(card: Card)
 	{
 		require(deck.hand.contains(card), "Hand must contain card: " + card.toString)

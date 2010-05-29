@@ -1,23 +1,28 @@
 package com.motlin.dominion
 
-import collection.mutable.ListBuffer
-
 import card.treasure.Copper
 import card.vp.Estate
 import org.junit.Test
 import org.scalatest.junit.AssertionsForJUnit._
+import collection.mutable.{ArrayBuffer, ListBuffer}
 
 class PlayerTest
 {
-	val player = new Player(new Supply(1))
-	player.deck.hand.clear()
-	player.startTurn()
 
 	@Test
 	def play_copper_for_one_coin
 	{
-		player.deck.hand ++= List(Estate, Copper, Estate, Copper)
-		player.play(Copper)
+		class FakePlayer(override val supply: Supply) extends Player(supply)
+		{
+			override val deck = new FakeDeck(ArrayBuffer(Estate, Copper, Estate, Copper), Nil)
+			def takeTurn() =
+			{
+				this.play(Copper)
+			}
+
+		}
+		val player = new FakePlayer(new Supply(1))
+		player.startTurn()
 		assert(player.turn.get.coins === 1)
 		assert(player.deck.hand === ListBuffer(Estate, Estate, Copper))
 	}
@@ -25,22 +30,38 @@ class PlayerTest
 	@Test
 	def can_not_play_card_not_held
 	{
-		player.deck.hand ++= List(Estate, Estate, Estate)
-		player.deck.drawPile = List(Copper, Estate)
-
-		intercept[IllegalArgumentException]
+		class FakePlayer(override val supply: Supply) extends Player(supply)
 		{
-			player.play(Copper)
+			override val deck = new FakeDeck(ArrayBuffer(Estate, Estate, Estate), List(Copper, Estate))
+			def takeTurn() =
+			{
+				intercept[IllegalArgumentException]
+				{
+					this.play(Copper)
+				}
+			}
+
 		}
+		val player = new FakePlayer(new Supply(1))
+		player.startTurn()
 	}
 
 	@Test
 	def can_not_play_victory_point_cards
 	{
-		player.deck.hand ++= List(Estate, Copper, Estate)
-		intercept[IllegalArgumentException]
+		class FakePlayer(override val supply: Supply) extends Player(supply)
 		{
-			player.play(Estate)
+			override val deck = new FakeDeck(ArrayBuffer(Estate, Estate, Copper), Nil)
+			def takeTurn() =
+			{
+				intercept[IllegalArgumentException]
+				{
+					this.play(Estate)
+				}
+			}
+
 		}
+		val player = new FakePlayer(new Supply(1))
+		player.startTurn()
 	}
 }
