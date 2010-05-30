@@ -14,7 +14,7 @@ class BuyTest
 	{
 		class FakePlayer(override val supply: Supply) extends Player(supply)
 		{
-			override val deck = new FakeDeck(ArrayBuffer(), Nil)
+			override val deck = Deck(ArrayBuffer(), Nil, Nil)
 			def takeTurn() =
 			{
 				this.buy(Copper)
@@ -36,7 +36,7 @@ class BuyTest
 		var exception = new Exception
 		class FakePlayer(override val supply: Supply) extends Player(supply)
 		{
-			override val deck = new FakeDeck(ArrayBuffer(), Nil)
+			override val deck = Deck(ArrayBuffer(), Nil, Nil)
 			def takeTurn() =
 			{
 				exception = intercept[IllegalArgumentException]
@@ -76,7 +76,7 @@ class BuyTest
 	{
 		class FakePlayer(override val supply: Supply) extends Player(supply)
 		{
-			override val deck = new FakeDeck(ArrayBuffer(Copper, Estate, Copper), Nil)
+			override val deck = Deck (ArrayBuffer(Copper, Estate, Copper), Nil, Nil)
 			def takeTurn() =
 			{
 				this.play(Copper)

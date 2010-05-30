@@ -39,7 +39,7 @@ abstract class Player(val supply: Supply)
 		}
 	}
 
-	val deck: DeckTrait = new Deck
+	val deck: Deck = Deck()
 	var turn: Option[Turn] = None
 
 	def startTurn()

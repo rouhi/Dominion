@@ -8,13 +8,12 @@ import collection.mutable.{ArrayBuffer, ListBuffer}
 
 class PlayerTest
 {
-
 	@Test
 	def play_copper_for_one_coin
 	{
 		class FakePlayer(override val supply: Supply) extends Player(supply)
 		{
-			override val deck = new FakeDeck(ArrayBuffer(Estate, Copper, Estate, Copper), Nil)
+			override val deck = Deck(ArrayBuffer(Estate, Copper, Estate, Copper), Nil, Nil)
 			def takeTurn() =
 			{
 				this.play(Copper)
@@ -32,7 +31,7 @@ class PlayerTest
 	{
 		class FakePlayer(override val supply: Supply) extends Player(supply)
 		{
-			override val deck = new FakeDeck(ArrayBuffer(Estate, Estate, Estate), List(Copper, Estate))
+			override val deck = Deck(ArrayBuffer(Estate, Estate, Estate), List(Copper, Estate), Nil)
 			def takeTurn() =
 			{
 				intercept[IllegalArgumentException]
@@ -51,7 +50,7 @@ class PlayerTest
 	{
 		class FakePlayer(override val supply: Supply) extends Player(supply)
 		{
-			override val deck = new FakeDeck(ArrayBuffer(Estate, Estate, Copper), Nil)
+			override val deck = Deck(ArrayBuffer(Estate, Estate, Copper), Nil, Nil)
 			def takeTurn() =
 			{
 				intercept[IllegalArgumentException]

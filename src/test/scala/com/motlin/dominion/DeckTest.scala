@@ -7,7 +7,7 @@ import org.scalatest.junit.AssertionsForJUnit._
 
 class DeckTest
 {
-	val deck = new Deck
+	val deck = Deck()
 	val initialCards = (deck.drawPile ++ deck.hand)
 
 	@Test

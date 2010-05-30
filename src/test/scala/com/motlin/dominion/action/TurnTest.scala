@@ -6,8 +6,8 @@ import com.motlin.dominion.card.vp.Estate
 import org.junit.Test
 import org.scalatest.junit.AssertionsForJUnit._
 import collection.mutable.ArrayBuffer
-import com.motlin.dominion.{FakeDeck, Player, Supply}
 import com.motlin.dominion.card.Card
+import com.motlin.dominion.{Deck, Player, Supply}
 
 class TurnTest
 {
@@ -108,7 +108,7 @@ class TurnTest
 	{
 		class FakePlayer(override val supply: Supply) extends Player(supply)
 		{
-			override val deck = new FakeDeck(hand, Nil)
+			override val deck = Deck(hand, Nil, Nil)
 			def takeTurn() =
 			{
 				action(this)
