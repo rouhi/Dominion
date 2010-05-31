@@ -101,7 +101,7 @@ class TurnTest
 
 	private def buildPlayer(action: Player => Unit): Player =
 	{
-		buildPlayerWithHand(ArrayBuffer(Woodcutter, Estate, Copper, Estate, Copper), action(_))
+		buildPlayerWithHand(ArrayBuffer(Woodcutter, Estate, Copper, Estate, Copper), action)
 	}
 
 	private def buildPlayerWithHand(hand: ArrayBuffer[Card], action: Player => Unit): Player =

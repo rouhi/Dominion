@@ -11,7 +11,7 @@ class PlayerTest
 	@Test
 	def play_copper_for_one_coin
 	{
-		class FakePlayer(override val supply: Supply) extends Player(supply)
+		class FakePlayer(supply: Supply) extends Player(supply)
 		{
 			override val deck = Deck(ArrayBuffer(Estate, Copper, Estate, Copper), Nil, Nil)
 			def takeTurn() =
