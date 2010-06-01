@@ -20,7 +20,7 @@ class PlayerTest
 			}
 
 		}
-		val player = new FakePlayer(new Supply(1))
+		val player = new FakePlayer(new Supply(1, Nil))
 		player.startTurn()
 		assert(player.turn.get.coins === 1)
 		assert(player.deck.hand === ListBuffer(Estate, Estate, Copper))
@@ -41,7 +41,7 @@ class PlayerTest
 			}
 
 		}
-		val player = new FakePlayer(new Supply(1))
+		val player = new FakePlayer(new Supply(1, Nil))
 		player.startTurn()
 	}
 
@@ -60,7 +60,7 @@ class PlayerTest
 			}
 
 		}
-		val player = new FakePlayer(new Supply(1))
+		val player = new FakePlayer(new Supply(1, Nil))
 		player.startTurn()
 	}
 }

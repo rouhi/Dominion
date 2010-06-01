@@ -3,8 +3,12 @@ package com.motlin.dominion
 import card._
 import collection.mutable.{Undoable, Stack}
 
+// TODO: rename to Seat?
 abstract class Player(val supply: Supply)
 {
+	val deck: Deck = Deck()
+	var turn: Option[Turn] = None
+
 	class Turn
 	{
 		var actions = 1
@@ -39,9 +43,6 @@ abstract class Player(val supply: Supply)
 		}
 	}
 
-	val deck: Deck = Deck()
-	var turn: Option[Turn] = None
-
 	def startTurn()
 	{
 		turn = Some(new Turn)
@@ -49,7 +50,7 @@ abstract class Player(val supply: Supply)
 	}
 
 	def takeTurn() : Unit
-	
+
 	def play(card: Card)
 	{
 		require(deck.hand.contains(card), "Hand must contain card: " + card.toString)

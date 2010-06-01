@@ -114,6 +114,6 @@ class TurnTest
 				action(this)
 			}
 		}
-		new FakePlayer(new Supply(1))
+		new FakePlayer(new Supply(1, Nil))
 	}
 }

@@ -2,10 +2,10 @@ package com.motlin.dominion
 
 import card.treasure._
 import card.vp._
-import card.Card
+import card.{Action, Card}
 import collection.mutable.Map
 
-class Supply(numPlayers: Int)
+class Supply(numPlayers: Int, actions: List[Action])
 {
 	private val vpCount = if (numPlayers > 2) 12 else 8
 
@@ -15,7 +15,8 @@ class Supply(numPlayers: Int)
 		Province -> vpCount,
 		Copper -> (60 - (numPlayers * 7)),
 		Silver -> 40,
-		Gold -> 30)
+		Gold -> 30) ++
+		actions.map(_ -> 10)
 
 	def count(card: Card): Int = map(card)
 

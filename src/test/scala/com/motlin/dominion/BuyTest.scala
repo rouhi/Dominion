@@ -1,27 +1,22 @@
 package com.motlin.dominion
 
-import card.vp.Estate
+import collection.mutable.ArrayBuffer
+
 import card.treasure.Copper
+import card.vp.Estate
+import net.test.MockPlayer
+
 import org.junit.Test
 import org.scalatest.junit.AssertionsForJUnit._
-import java.lang.IllegalArgumentException
-import collection.mutable.ArrayBuffer
 
 class BuyTest
 {
 	@Test
 	def player_with_0_can_afford_copper
 	{
-		class FakePlayer(override val supply: Supply) extends Player(supply)
-		{
-			override val deck = Deck(ArrayBuffer(), Nil, Nil)
-			def takeTurn() =
-			{
-				this.buy(Copper)
-			}
-
-		}
-		val player = new FakePlayer(new Supply(1))
+		val supply = new Supply(1, Nil)
+		val player = new MockPlayer(Deck(ArrayBuffer(), Nil, Nil), supply)
+		player.queueAction(_.buy(Copper))
 		player.startTurn()
 
 		assert(player.deck.drawPile === List())
@@ -46,7 +41,7 @@ class BuyTest
 			}
 
 		}
-		val player = new FakePlayer(new Supply(1))
+		val player = new FakePlayer(new Supply(1, Nil))
 		player.startTurn()
 
 		assert(exception.getMessage.contains("Cannot afford card: Estate"))
@@ -84,6 +79,6 @@ class BuyTest
 				this.buy(Estate)
 			}
 		}
-		new FakePlayer(new Supply(1))
+		new FakePlayer(new Supply(1, Nil))
 	}
 }
