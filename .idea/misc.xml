@@ -8,6 +8,7 @@
       <facet-type id="Scala">
         <modules>
           <module name="dominion" />
+          <module name="server" />
         </modules>
       </facet-type>
     </autodetection-disabled>
