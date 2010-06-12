@@ -6,12 +6,12 @@
         <option name="takeFromSettings" value="true" />
         <option name="myScalaCompilerJarPaths">
           <array>
-            <option value="$MAVEN_REPOSITORY$/org/scala-lang/scala-compiler/2.8.0.RC3/scala-compiler-2.8.0.RC3.jar" />
+            <option value="$MAVEN_REPOSITORY$/org/scala-lang/scala-compiler/2.8.0.RC4/scala-compiler-2.8.0.RC4.jar" />
           </array>
         </option>
         <option name="myScalaSdkJarPaths">
           <array>
-            <option value="$MAVEN_REPOSITORY$/org/scala-lang/scala-library/2.8.0.RC3/scala-library-2.8.0.RC3.jar" />
+            <option value="$MAVEN_REPOSITORY$/org/scala-lang/scala-library/2.8.0.RC4/scala-library-2.8.0.RC4.jar" />
           </array>
         </option>
       </configuration>
@@ -29,9 +29,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="Maven: org.scala-lang:scala-library:2.8.0.RC3" level="project" />
-    <orderEntry type="library" exported="" name="Maven: org.scala-lang:scalap:2.8.0.RC3" level="project" />
-    <orderEntry type="library" exported="" name="Maven: org.scala-lang:scala-compiler:2.8.0.RC3" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.scala-lang:scala-library:2.8.0.RC4" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.scala-lang:scalap:2.8.0.RC4" level="project" />
+    <orderEntry type="library" exported="" name="Maven: org.scala-lang:scala-compiler:2.8.0.RC4" level="project" />
     <orderEntry type="library" exported="" name="Maven: com.google.inject:guice:2.0" level="project" />
     <orderEntry type="library" exported="" name="Maven: aopalliance:aopalliance:1.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.8.1" level="project" />

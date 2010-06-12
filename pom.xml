@@ -11,12 +11,9 @@
     <version>1.0.0-SNAPSHOT</version>
 
     <inceptionYear>2010</inceptionYear>
-    <modules>
-        <module>server</module>
-    </modules>
 
     <properties>
-        <scala.version>2.8.0.RC3</scala.version>
+        <scala.version>2.8.0.RC4</scala.version>
     </properties>
 
     <repositories>
