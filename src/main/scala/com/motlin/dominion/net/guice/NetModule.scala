@@ -1,13 +1,12 @@
-package com.motlin.dominion.server.guice
+package com.motlin.dominion.net.guice
 
 
 import java.util.Properties
 import com.google.inject.{Provides, AbstractModule, Singleton}
 import com.google.inject.name.{Named, Names}
-import java.net.ServerSocket
-import java.io.{InputStream, FileReader}
+import java.net.{Socket, ServerSocket}
 
-class ServerModule extends AbstractModule
+class NetModule extends AbstractModule
 {
 	def configure
 	{
@@ -17,4 +16,6 @@ class ServerModule extends AbstractModule
 	}
 
 	@Provides @Singleton def serverSocket(@Named("port") port: Int) = new ServerSocket(port)
+
+	@Provides def clientSocket(@Named("port") port: Int) = new Socket("localhost", port)
 }
