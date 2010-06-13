@@ -2,16 +2,10 @@ package com.motlin.dominion.net.client
 
 import com.google.inject.Inject
 import java.util.concurrent.TimeUnit
-import com.motlin.dominion.net.SocketOutputHandler
-import java.io.Serializable
-import com.motlin.dominion.net.client.ServerConnection.Message
+import com.motlin.dominion.net.{SocketInputHandler, SocketOutputHandler}
+import com.motlin.dominion.net.comm.{Login, Message}
 
-object ServerConnection
-{
-	case class Message(embedded: String) extends Serializable
-}
-
-case class ServerConnection @Inject() (socketOutputHandler: SocketOutputHandler) extends Runnable
+case class ServerConnection @Inject() (socketInputHandler: SocketInputHandler, socketOutputHandler: SocketOutputHandler) extends Runnable
 {
 	def run()
 	{
