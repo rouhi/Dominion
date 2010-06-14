@@ -5,8 +5,8 @@ import java.io.{IOException, ObjectInputStream, BufferedInputStream}
 
 abstract class SocketInputHandler(socket: Socket) extends Runnable
 {
-	val inputStream = new ObjectInputStream(new BufferedInputStream(socket.getInputStream))
 	@volatile var closed = false
+	var inputStream: ObjectInputStream = _
 
 	def handle(readObject: AnyRef)
 
@@ -14,6 +14,7 @@ abstract class SocketInputHandler(socket: Socket) extends Runnable
 	{
 		try
 		{
+			inputStream = new ObjectInputStream(new BufferedInputStream(socket.getInputStream))
 			while(!closed)
 			{
 				handle(inputStream.readObject)
@@ -36,7 +37,10 @@ abstract class SocketInputHandler(socket: Socket) extends Runnable
 
 	def cleanUp()
 	{
-		inputStream.close()
+		if (inputStream != null)
+		{
+			inputStream.close()
+		}
 		socket.close()
 	}
 

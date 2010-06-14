@@ -5,10 +5,10 @@ import com.motlin.dominion.net.guice.NetModule
 
 object Client
 {
-	def main(args: String*)
+	def main(args: Array[String])
 	{
 		val injector = Guice.createInjector(new NetModule())
 		val serverConnection = injector.getInstance(classOf[ServerConnection])
-		new Thread(serverConnection).start()
+		serverConnection.start()
 	}
 }

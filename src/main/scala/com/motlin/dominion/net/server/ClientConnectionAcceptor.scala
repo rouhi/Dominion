@@ -4,6 +4,7 @@ import java.net.ServerSocket
 import actors.threadpool.{TimeUnit, Executors}
 import com.google.inject.{Inject, Singleton}
 import com.motlin.dominion.net.SocketOutputHandler
+import com.motlin.dominion.net.comm.Welcome
 
 @Singleton
 case class ClientConnectionAcceptor @Inject() (serverSocket: ServerSocket) extends Runnable
@@ -17,11 +18,10 @@ case class ClientConnectionAcceptor @Inject() (serverSocket: ServerSocket) exten
 		while(!closed)
 		{
 			val socket = serverSocket.accept
-			val clientInputHandler = new ClientInputHandler(socket)
 			val socketOutputHandler = new SocketOutputHandler(socket)
-			val connectedClient = new ConnectedClient(clientInputHandler, socketOutputHandler)
+			val connectedClient = new ConnectedClient(socket, socketOutputHandler)
 			connectedClients ::= connectedClient
-			executorService.execute(clientInputHandler)
+			connectedClient.start
 		}
 
 		executorService.shutdown()
@@ -32,6 +32,7 @@ case class ClientConnectionAcceptor @Inject() (serverSocket: ServerSocket) exten
 	{
 		closed = true
 		serverSocket.close()
+		// TODO: shut down all connectedClients
 	}
 
 	// TODO: consider creating a finalizer to call close()

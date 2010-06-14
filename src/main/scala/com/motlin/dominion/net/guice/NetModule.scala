@@ -17,5 +17,5 @@ class NetModule extends AbstractModule
 
 	@Provides @Singleton def serverSocket(@Named("port") port: Int) = new ServerSocket(port)
 
-	@Provides def clientSocket(@Named("port") port: Int) = new Socket("localhost", port)
+	@Provides @Singleton def clientSocket(@Named("host") host: String, @Named("port") port: Int) = new Socket(host, port)
 }
