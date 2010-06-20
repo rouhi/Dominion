@@ -57,6 +57,7 @@ case class ServerConnection @Inject() (serverSocket: Socket, socketOutputHandler
 						socketInputHandler.cleanUp()
 						executorService.shutdown()
 						executorService.awaitTermination(10L, TimeUnit.SECONDS)
+						this.exit()
 					}
 				}
 				case other =>

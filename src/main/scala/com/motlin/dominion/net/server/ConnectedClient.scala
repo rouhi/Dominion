@@ -1,7 +1,6 @@
 package com.motlin.dominion.net.server
 
 import java.net.Socket
-import com.google.inject.Inject
 import actors.Actor
 import com.motlin.dominion.net.comm._
 import actors.threadpool.{TimeUnit, Executors}
@@ -13,7 +12,7 @@ object ConnectedClient
 	val LOGGER = LoggerFactory.getLogger(classOf[ConnectedClient])
 }
 
-case class ConnectedClient(clientSocket: Socket, socketOutputHandler: SocketOutputHandler) extends Actor
+case class ConnectedClient(server: ServerState, clientSocket: Socket, socketOutputHandler: SocketOutputHandler) extends Actor
 {
 	val socketInputHandler = new SocketInputHandler(clientSocket)
 	{
@@ -37,7 +36,8 @@ case class ConnectedClient(clientSocket: Socket, socketOutputHandler: SocketOutp
 			{
 				case Login(username) =>
 				{
-					ConnectedClient.LOGGER.info("Got login request from {}. Log in succeeded", username)
+					ConnectedClient.LOGGER.info("Got login request from {}.", username)
+					server.login(username, this)
 					socketOutputHandler ! LoggedIn(true)
 				}
 				case Ping =>
@@ -47,11 +47,7 @@ case class ConnectedClient(clientSocket: Socket, socketOutputHandler: SocketOutp
 				}
 				case Close =>
 				{
-					ConnectedClient.LOGGER.info("Client closing.")
-					socketOutputHandler ! Close
-					socketInputHandler.cleanUp()
-					executorService.shutdown()
-					executorService.awaitTermination(10L, TimeUnit.SECONDS)
+					this.close()
 				}
 				case other =>
 				{
@@ -59,5 +55,14 @@ case class ConnectedClient(clientSocket: Socket, socketOutputHandler: SocketOutp
 				}
 			}
 		}
+	}
+
+	def close()
+	{
+		ConnectedClient.LOGGER.info("Client closing.")
+		socketOutputHandler ! Close
+		socketInputHandler.cleanUp()
+		executorService.shutdown()
+		executorService.awaitTermination(10L, TimeUnit.SECONDS)
 	}
 }

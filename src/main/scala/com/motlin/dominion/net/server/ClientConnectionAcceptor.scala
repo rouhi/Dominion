@@ -4,10 +4,10 @@ import java.net.ServerSocket
 import actors.threadpool.{TimeUnit, Executors}
 import com.google.inject.{Inject, Singleton}
 import com.motlin.dominion.net.SocketOutputHandler
-import com.motlin.dominion.net.comm.Welcome
 
+// TODO don't pass in server, we need a ConnectedClient factory instead
 @Singleton
-case class ClientConnectionAcceptor @Inject() (serverSocket: ServerSocket) extends Runnable
+case class ClientConnectionAcceptor @Inject() (server: ServerState, serverSocket: ServerSocket) extends Runnable
 {
 	val executorService = Executors.newCachedThreadPool
 	var closed = false
@@ -19,7 +19,7 @@ case class ClientConnectionAcceptor @Inject() (serverSocket: ServerSocket) exten
 		{
 			val socket = serverSocket.accept
 			val socketOutputHandler = new SocketOutputHandler(socket)
-			val connectedClient = new ConnectedClient(socket, socketOutputHandler)
+			val connectedClient = new ConnectedClient(server, socket, socketOutputHandler)
 			connectedClients ::= connectedClient
 			connectedClient.start
 		}
