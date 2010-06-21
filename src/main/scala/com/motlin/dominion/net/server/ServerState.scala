@@ -4,7 +4,7 @@ import collection._
 import com.google.inject.{Singleton, Inject}
 
 @Singleton
-class ServerState @Inject() () 
+case class ServerState @Inject() () 
 {
 	val users = mutable.Map[String, User]()
 	val loggedIn = mutable.Map[String, ConnectedClient]()

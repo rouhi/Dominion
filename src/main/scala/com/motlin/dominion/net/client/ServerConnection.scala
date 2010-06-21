@@ -26,8 +26,6 @@ case class ServerConnection @Inject() (serverSocket: Socket, socketOutputHandler
 	val executorService = Executors.newSingleThreadExecutor(new NamedThreadFactory(this.getClass.getName))
 	executorService.execute(socketInputHandler)
 
-	socketOutputHandler.start
-
 	def act()
 	{
 		var pongs = 0
@@ -39,21 +37,21 @@ case class ServerConnection @Inject() (serverSocket: Socket, socketOutputHandler
 				case Welcome =>
 				{
 					ServerConnection.LOGGER.info("Got welcome message. Logging in.")
-					socketOutputHandler ! Login("testuser")
+					socketOutputHandler.write(Login("testuser"))
 				}
 				case LoggedIn(true) =>
 				{
 					ServerConnection.LOGGER.info("Logged in successfully. Sending ping.")
-					socketOutputHandler ! Ping
+					socketOutputHandler.write(Ping)
 				}
 				case Pong =>
 				{
 					pongs += 1
 					ServerConnection.LOGGER.info("Got {} pongs. Sending ping.", pongs)
-					socketOutputHandler ! Ping
+					socketOutputHandler.write(Ping)
 					if (pongs >= 10)
 					{
-						socketOutputHandler ! Close
+						socketOutputHandler.write(Close)
 						socketInputHandler.cleanUp()
 						executorService.shutdown()
 						executorService.awaitTermination(10L, TimeUnit.SECONDS)

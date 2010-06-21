@@ -1,10 +1,9 @@
 package com.motlin.dominion.net
 
 import comm.Close
-import java.net.Socket
+import java.net.{Socket, SocketException}
 import java.io.{ObjectOutputStream, BufferedOutputStream}
 import com.google.inject.Inject
-import actors.Actor
 import org.slf4j.LoggerFactory
 
 object SocketOutputHandler
@@ -12,35 +11,44 @@ object SocketOutputHandler
 	val LOGGER = LoggerFactory.getLogger(classOf[SocketOutputHandler])
 }
 
-case class SocketOutputHandler @Inject() (socket: Socket) extends Actor
+// TODO: consider making this an Actor again
+case class SocketOutputHandler @Inject() (socket: Socket)
 {
 	val outputStream = new ObjectOutputStream(new BufferedOutputStream(socket.getOutputStream))
+    var closed = false
 
 	def write(writeObject: Any)
 	{
-		SocketOutputHandler.LOGGER.info("Sending {}.", writeObject)
-		outputStream.writeObject(writeObject)
-		outputStream.flush()
+	    if (!this.closed)
+        {
+        	SocketOutputHandler.LOGGER.info("Sending {}.", writeObject)
+		    try
+		    {
+		        outputStream.writeObject(writeObject)
+		        outputStream.flush()
+		    }
+		    catch
+		    {
+		        case _: SocketException => socket.close()
+		    }
+		}
 	}
 
-	def act()
+	def close()
 	{
-		loop
-		{
-			react
+	    if (!this.closed)
+	    {
+    	    write(Close)
+	        this.closed = true
+			try
 			{
-				case Close =>
-				{
-					write(Close)
-					outputStream.close()
-					socket.close()
-					exit
-				}
-				case writeObject =>
-				{
-					write(writeObject)
-				}
+				outputStream.close()
 			}
+			catch
+			{
+				case e: SocketException => // Deliberately ignored
+			}
+			socket.close()
 		}
 	}
 

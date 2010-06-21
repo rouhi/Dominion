@@ -25,8 +25,7 @@ case class ConnectedClient(server: ServerState, clientSocket: Socket, socketOutp
 	val executorService = Executors.newSingleThreadExecutor(new NamedThreadFactory(this.getClass.getName))
 	executorService.execute(socketInputHandler)
 
-	socketOutputHandler.start
-	socketOutputHandler ! Welcome
+	socketOutputHandler.write(Welcome)
 
 	def act()
 	{
@@ -38,12 +37,12 @@ case class ConnectedClient(server: ServerState, clientSocket: Socket, socketOutp
 				{
 					ConnectedClient.LOGGER.info("Got login request from {}.", username)
 					server.login(username, this)
-					socketOutputHandler ! LoggedIn(true)
+					socketOutputHandler.write(LoggedIn(true))
 				}
 				case Ping =>
 				{
 					ConnectedClient.LOGGER.info("Got Ping, sending Pong.")
-					socketOutputHandler ! Pong
+					socketOutputHandler.write(Pong)
 				}
 				case Close =>
 				{
@@ -60,7 +59,7 @@ case class ConnectedClient(server: ServerState, clientSocket: Socket, socketOutp
 	def close()
 	{
 		ConnectedClient.LOGGER.info("Client closing.")
-		socketOutputHandler ! Close
+		socketOutputHandler.close()
 		socketInputHandler.cleanUp()
 		executorService.shutdown()
 		executorService.awaitTermination(10L, TimeUnit.SECONDS)
