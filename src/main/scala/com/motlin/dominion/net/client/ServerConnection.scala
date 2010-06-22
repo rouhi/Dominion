@@ -1,12 +1,15 @@
 package com.motlin.dominion.net.client
 
-import com.google.inject.Inject
-import actors.Actor
 import java.net.Socket
-import com.motlin.dominion.net.comm._
+
+import actors.Actor
 import actors.threadpool.{TimeUnit, Executors}
-import org.slf4j.LoggerFactory
+
+import com.motlin.dominion.net.comm._
 import com.motlin.dominion.net.{NamedThreadFactory, SocketInputHandler, SocketOutputHandler}
+
+import com.google.inject.Inject
+import org.slf4j.LoggerFactory
 
 object ServerConnection
 {

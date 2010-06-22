@@ -12,7 +12,7 @@ object ConnectedClient
 	val LOGGER = LoggerFactory.getLogger(classOf[ConnectedClient])
 }
 
-case class ConnectedClient(server: ServerState, clientSocket: Socket, socketOutputHandler: SocketOutputHandler) extends Actor
+case class ConnectedClient(clientSocket: Socket, socketOutputHandler: SocketOutputHandler) extends Actor
 {
 	val socketInputHandler = new SocketInputHandler(clientSocket)
 	{
@@ -36,7 +36,6 @@ case class ConnectedClient(server: ServerState, clientSocket: Socket, socketOutp
 				case Login(username) =>
 				{
 					ConnectedClient.LOGGER.info("Got login request from {}.", username)
-					server.login(username, this)
 					socketOutputHandler.write(LoggedIn(true))
 				}
 				case Ping =>
