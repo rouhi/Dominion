@@ -1,6 +1,6 @@
 package com.motlin.dominion.state
 
-class Table
+class Table(val name: String, host: ServerState#User)
 {
 	
 }

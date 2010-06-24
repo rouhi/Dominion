@@ -12,7 +12,7 @@ object ConnectedClient
 	val LOGGER = LoggerFactory.getLogger(classOf[ConnectedClient])
 }
 
-case class ConnectedClient(clientSocket: Socket, socketOutputHandler: SocketOutputHandler) extends Actor
+case class ConnectedClient(clientSocket: Socket) extends Actor
 {
 	val socketInputHandler = new SocketInputHandler(clientSocket)
 	{
@@ -22,9 +22,10 @@ case class ConnectedClient(clientSocket: Socket, socketOutputHandler: SocketOutp
 		}
 	}
 
-	val executorService = Executors.newSingleThreadExecutor(new NamedThreadFactory(this.getClass.getName))
+	val executorService = Executors.newSingleThreadExecutor(new NamedThreadFactory(classOf[ConnectedClient].getSimpleName))
 	executorService.execute(socketInputHandler)
 
+	val socketOutputHandler: SocketOutputHandler = new SocketOutputHandler(clientSocket)
 	socketOutputHandler.write(Welcome)
 
 	def act()
@@ -59,8 +60,9 @@ case class ConnectedClient(clientSocket: Socket, socketOutputHandler: SocketOutp
 	{
 		ConnectedClient.LOGGER.info("Client closing.")
 		socketOutputHandler.close()
-		socketInputHandler.cleanUp()
+		socketInputHandler.close()
 		executorService.shutdown()
 		executorService.awaitTermination(10L, TimeUnit.SECONDS)
+		this.exit()
 	}
 }

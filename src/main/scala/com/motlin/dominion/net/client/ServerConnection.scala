@@ -18,20 +18,28 @@ object ServerConnection
 
 case class ServerConnection @Inject() (serverSocket: Socket, socketOutputHandler: SocketOutputHandler) extends Actor
 {
-	val socketInputHandler = new SocketInputHandler(serverSocket)
-	{
-		def handle(readObject: AnyRef)
-		{
-			ServerConnection.this ! readObject
-		}
-	}
-
-	val executorService = Executors.newSingleThreadExecutor(new NamedThreadFactory(this.getClass.getName))
-	executorService.execute(socketInputHandler)
-
 	def act()
 	{
 		var pongs = 0
+		val socketInputHandler = new SocketInputHandler(serverSocket)
+		{
+			def handle(readObject: AnyRef)
+			{
+				ServerConnection.this ! readObject
+			}
+		}
+
+		val executorService = Executors.newSingleThreadExecutor(new NamedThreadFactory(this.getClass.getName))
+		executorService.execute(socketInputHandler)
+
+		def close()
+		{
+			socketOutputHandler.close()
+			socketInputHandler.close()
+			executorService.shutdown()
+			executorService.awaitTermination(10L, TimeUnit.SECONDS)
+			this.exit()
+		}
 
 		loop
 		{
@@ -54,12 +62,12 @@ case class ServerConnection @Inject() (serverSocket: Socket, socketOutputHandler
 					socketOutputHandler.write(Ping)
 					if (pongs >= 10)
 					{
-						socketOutputHandler.write(Close)
-						socketInputHandler.cleanUp()
-						executorService.shutdown()
-						executorService.awaitTermination(10L, TimeUnit.SECONDS)
-						this.exit()
+						close()
 					}
+				}
+				case Close =>
+				{
+					close()
 				}
 				case other =>
 				{

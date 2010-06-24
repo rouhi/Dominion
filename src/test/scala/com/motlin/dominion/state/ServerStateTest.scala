@@ -9,14 +9,14 @@ class ServerStateTest
 	def user_smoke_test
 	{
 		val serverState = new ServerState()
-		val tables = serverState.listTables
+		val tables: List[Table] = serverState.listTables
 		assert(tables === Nil)
 
-		val user = serverState.createUser("test user")
+		val user: ServerState#User = serverState.createUser("test user")
 		user.createTable("my table")
 		val tables2 = serverState.listTables
-		assert(tables.size === 1)
-		assert(tables.first.name === "my table")
+		assert(tables2.size === 1)
+		assert(tables2.head.name === "my table")
 	}
 
 }

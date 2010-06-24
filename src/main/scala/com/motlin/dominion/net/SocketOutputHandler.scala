@@ -50,6 +50,8 @@ case class SocketOutputHandler @Inject() (socket: Socket)
 			}
 			socket.close()
 		}
+
+		SocketOutputHandler.LOGGER.info("Done closing.")
 	}
 
 	// TODO: consider creating a finalizer to call close()

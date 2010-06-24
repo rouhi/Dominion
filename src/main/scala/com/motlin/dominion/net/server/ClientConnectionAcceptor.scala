@@ -1,31 +1,52 @@
 package com.motlin.dominion.net.server
 
-import java.net.ServerSocket
+import com.motlin.dominion.net.{NamedThreadFactory, SocketOutputHandler}
+
+import java.net.{SocketException, ServerSocket}
+
 import actors.threadpool.{TimeUnit, Executors}
+
 import com.google.inject.{Inject, Singleton}
-import com.motlin.dominion.net.SocketOutputHandler
+import org.slf4j.LoggerFactory
+
+object ClientConnectionAcceptor
+{
+	val LOGGER = LoggerFactory.getLogger(classOf[ClientConnectionAcceptor])
+}
 
 // TODO don't pass in server, we need a ConnectedClient factory instead
 @Singleton
 case class ClientConnectionAcceptor @Inject() (serverSocket: ServerSocket) extends Runnable
 {
-	val executorService = Executors.newCachedThreadPool
+	val executorService = Executors.newCachedThreadPool(new NamedThreadFactory(classOf[ClientConnectionAcceptor].getSimpleName))
 	var closed = false
 	var connectedClients: List[ConnectedClient] = Nil
 
 	def run()
 	{
-		while(!closed)
+		try
 		{
-			val socket = serverSocket.accept
-			val socketOutputHandler = new SocketOutputHandler(socket)
-			val connectedClient = new ConnectedClient(socket, socketOutputHandler)
-			connectedClients ::= connectedClient
-			connectedClient.start
+			while(!closed)
+			{
+				val socket = serverSocket.accept
+				val connectedClient = new ConnectedClient(socket)
+				connectedClients ::= connectedClient
+				connectedClient.start
+			}
 		}
-
-		executorService.shutdown()
-		executorService.awaitTermination(5L, TimeUnit.SECONDS)		
+		catch
+		{
+			case e: SocketException =>
+			{
+				ClientConnectionAcceptor.LOGGER.debug("", e)
+				connectedClients.foreach(_.close())
+			}
+		}
+		finally
+		{
+			executorService.shutdown()
+			executorService.awaitTermination(5L, TimeUnit.SECONDS)
+		}
 	}
 
 	def close()

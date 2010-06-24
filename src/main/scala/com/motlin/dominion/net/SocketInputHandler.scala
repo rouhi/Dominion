@@ -2,10 +2,15 @@ package com.motlin.dominion.net
 
 import java.net.Socket
 import java.io.{IOException, ObjectInputStream, BufferedInputStream}
+import org.slf4j.LoggerFactory
+
+object SocketInputHandler
+{
+	val LOGGER = LoggerFactory.getLogger(classOf[SocketInputHandler])
+}
 
 abstract class SocketInputHandler(socket: Socket) extends Runnable
 {
-	@volatile var closed = false
 	var inputStream: ObjectInputStream = _
 
 	def handle(readObject: AnyRef)
@@ -15,7 +20,7 @@ abstract class SocketInputHandler(socket: Socket) extends Runnable
 		try
 		{
 			inputStream = new ObjectInputStream(new BufferedInputStream(socket.getInputStream))
-			while(!closed)
+			while(true)
 			{
 				handle(inputStream.readObject)
 			}
@@ -23,24 +28,19 @@ abstract class SocketInputHandler(socket: Socket) extends Runnable
 		catch
 		{
 			case ignored: IOException =>
+			{
+				SocketInputHandler.LOGGER.info("", ignored)
+			}
 		}
 		finally
 		{
-			this.cleanUp()
+			this.close()
 		}
 	}
 
 	def close()
 	{
-		this.closed = true
-	}
-
-	def cleanUp()
-	{
-		if (inputStream != null)
-		{
-			inputStream.close()
-		}
+		inputStream.close()
 		socket.close()
 	}
 
