@@ -16,11 +16,12 @@ class ServerState
 	{
 		var hostedTables: List[Table] = Nil
 
-		def createTable(tableName: String)
+		def createTable(tableName: String) =
 		{
 			val table = new Table(tableName, this)
 			hostedTables ::= table
 			tables ::= table
+			table
 		}
 	}
 }
