@@ -74,7 +74,6 @@ class TurnTest
 		assert(handAfter === handBefore)
 	}
 
-
 	@Test
 	def undo_after_failed_action_due_to_one_action
 	{
