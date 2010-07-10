@@ -1,6 +1,8 @@
 package com.motlin.dominion.state
 
 import collection._
+import com.motlin.dominion.Player
+import com.motlin.dominion.card.Action
 
 class ServerState
 {
@@ -15,13 +17,14 @@ class ServerState
 	case class User(userName: String)
 	{
 		var hostedTables: List[Table] = Nil
+		var seats: List[Player] = Nil
 
-		def createTable(tableName: String) =
+		def createTable(tableName: String, actions: List[Action]) =
 		{
-			val table = new Table(tableName, this)
+			val (table, player) = Table.host(tableName, this, actions)
 			hostedTables ::= table
 			tables ::= table
-			table
+			seats ::= player
 		}
 	}
 }

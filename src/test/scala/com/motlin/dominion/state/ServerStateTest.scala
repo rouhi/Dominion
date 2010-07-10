@@ -24,11 +24,15 @@ class ServerStateTest
 	}
 
 	@Test
-	def start_game
+	def start_game_with_one_player_fails
 	{
-		val table = user.createTable("my table")
-		val user2 = serverState.createUser("second user")
+		val (table, player) = user.createTable("my table")
+//		val user2 = serverState.createUser("second user")
 		assert(!table.gameInProgress)
-		table.startGame(List.fill(10)(Woodcutter))
+		exception = intercept[IllegalArgumentException]
+		{
+			table.startGame(List.fill(10)(Woodcutter))
+		}
+		assert(exception.getMessage === "You may only start the game with 2 to 4 players.  Found 1 player")
 	}
 }
